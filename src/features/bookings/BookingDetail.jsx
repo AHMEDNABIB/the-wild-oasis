@@ -9,44 +9,41 @@ import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
-
+import { useBooking } from "./useBooking";
 import Spinner from "../../ui/Spinner";
-import { useBooking } from './useBooking';
+import { useNavigate } from "react-router-dom";
+import { HiArrowUpOnSquare } from "react-icons/hi2";
+
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const HeadingGroup = styled.div`
-  display: flex;
-  gap: 2.4rem;
-  align-items: center;
+	display: flex;
+	gap: 2.4rem;
+	align-items: center;
 `;
 
 function BookingDetail() {
-  // const booking = {};
+	const { booking, isLoading } = useBooking();
 
-  const { booking, isLoading } = useBooking();
-  
-  const{id:bookingId,status}= booking
+	const moveBack = useMoveBack();
+	const navigate = useNavigate();
 
-  
-  
+	if (isLoading) return <Spinner />;
 
+	const { status, id: bookingId } = booking;
 
+	const statusToTagName = {
+		unconfirmed: "blue",
+		"checked-in": "green",
+		"checked-out": "silver",
+	};
 
-
-  const moveBack = useMoveBack();
-
-  if(isLoading) return <Spinner/>
-
-  const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
-  };
-
-  return (
+	return (
 		<>
 			<Row type="horizontal">
 				<HeadingGroup>
-          <Heading as="h1">Booking #{ bookingId }</Heading>
+					<Heading as="h1">Booking #{bookingId}</Heading>
 					<Tag type={statusToTagName[status]}>
 						{status.replace("-", " ")}
 					</Tag>
@@ -57,12 +54,21 @@ function BookingDetail() {
 			<BookingDataBox booking={booking} />
 
 			<ButtonGroup>
+				{status === "unconfirmed" && (
+					<Button onClick={() => navigate(`/checkin/${bookingId}`)}>
+						Check in
+					</Button>
+				)}
+
+				
+				
+
 				<Button variation="secondary" onClick={moveBack}>
 					Back
 				</Button>
 			</ButtonGroup>
 		</>
-  );
+	);
 }
 
 export default BookingDetail;
