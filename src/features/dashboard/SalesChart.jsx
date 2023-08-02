@@ -63,21 +63,21 @@ function SalesChart({ bookings, numDays }) {
 		end: new Date(),
 	});
 
-	 const data = allDates.map((date) => {
-			return {
-				label: format(date, "MMM dd"),
-				totalSales: bookings
-					.filter((booking) =>
-						isSameDay(date, new Date(booking.created_at))
-					)
-					.reduce((acc, cur) => acc + cur.totalPrice, 0),
-				extrasSales: bookings
-					.filter((booking) =>
-						isSameDay(date, new Date(booking.created_at))
-					)
-					.reduce((acc, cur) => acc + cur.extraPrice, 0),
-			};
-		});
+	const data = allDates.map((date) => {
+		return {
+			label: format(date, "MMM dd"),
+			totalSales: bookings
+				.filter((booking) =>
+					isSameDay(date, new Date(booking.created_at))
+				)
+				.reduce((acc, cur) => acc + cur.totalPrice, 0),
+			extrasSales: bookings
+				.filter((booking) =>
+					isSameDay(date, new Date(booking.created_at))
+				)
+				.reduce((acc, cur) => acc + cur.extraPrice, 0),
+		};
+	});
 
 	const colors = isDarkMode
 		? {
@@ -95,7 +95,10 @@ function SalesChart({ bookings, numDays }) {
 
 	return (
 		<StyledSalesChart>
-			<Heading as="h2">Sales</Heading>
+			<Heading as="h2">
+				Sales from {format(allDates.at(0), "MMM  dd yyyy")} &mdash;{" "}
+				{format(allDates.at(-1), "MMM  dd yyyy")}{" "}
+			</Heading>
 			<ResponsiveContainer height={300} width="100%">
 				<AreaChart data={data}>
 					<XAxis
