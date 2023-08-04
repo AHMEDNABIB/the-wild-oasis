@@ -7,7 +7,7 @@ export function useTodayActivity() {
 		queryKey: ["today-activity"],
     });
     
-    console.log(isLoading, activities)
+  
 
 	return { activities, isLoading };
 }
